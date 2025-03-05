@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 class Component {
     anchor; // DOM-Element, in das ich mich einhänge
     parent; // Component
@@ -40,7 +40,7 @@ class Component {
     }
     addToDom(elem) {
         if (!elem) {
-            throw new Error('Component.addToDom: no elem');
+            throw new Error("Component.addToDom: no elem");
         }
         this.domElement = elem;
         this.anchor.appendChild(elem);
@@ -51,7 +51,7 @@ class Component {
             this.anchor.removeChild(this.domElement);
             this.isADomChild = false;
         } else {
-            console.warn('Component.removeFromDom: was not a dom child:');
+            console.warn("Component.removeFromDom: was not a dom child:");
             console.warn(this.domElement);
         }
     }
