@@ -4,8 +4,13 @@
 }
 
 #controls {
-	width: var(--controls-size);
-	max-width: var(--controls-size);
+	position: fixed;
+	left: 20px;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 300px;
+	z-index: 1000;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 #grid {
