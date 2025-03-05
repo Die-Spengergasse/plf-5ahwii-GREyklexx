@@ -30,5 +30,4 @@
    - Implementierung der Arrow-Controls mit Grid-Layout
    - Hinzufügen von Transitions für besseres Feedback
    - Verbesserung der visuellen Hierarchie
-   - Vergrößerung der Pfeiltasten (1.8rem) und stärkere Ränder
-   - Anpassung der Play/Pause/Reset-Buttons für bessere Sichtbarkeit
+   - Optimierung der Grid-Zellen-Grenzen mit outline

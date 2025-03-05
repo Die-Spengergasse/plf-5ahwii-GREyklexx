@@ -16,18 +16,18 @@
 #grid {
 	display: grid;
 	width: var(--sudoku-size);
-	/* background: lightseagreen; */
 	aspect-ratio: 1/1;
-	grid-gap: 1px;
-	/* border: 2px solid lightseagreen; */
+	background-color: white;
+	gap: 0;
+	border: none;
 }
 
-/* styling cell below */
 #grid div {
 	background-color: var(--bs-info-bg-subtle);
 	transition: background-color 0.2s ease;
 	width: auto;
 	aspect-ratio: 1/1;
+	outline: 1px solid white;
 }
 
 #grid div.living {
