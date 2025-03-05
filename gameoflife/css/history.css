@@ -7,13 +7,42 @@
 	width: 400px;
 	z-index: 1000;
 	box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+	max-height: 90vh;
+	overflow-y: auto;
+}
+
+/* Chart Container */
+.chart-container {
+	height: 200px;
+	margin-bottom: 1rem;
+	background: white;
+	border-radius: 4px;
+	padding: 8px;
 }
 
 /* Slot Display */
 .slot-display {
-	min-height: 400px;
+	min-height: 200px;
+	max-height: 300px;
 	perspective: 1000px;
 	transform-style: preserve-3d;
+	overflow-y: auto;
+	scrollbar-width: thin;
+	scrollbar-color: var(--bs-primary) transparent;
+}
+
+/* Scrollbar Styling */
+.slot-display::-webkit-scrollbar {
+	width: 6px;
+}
+
+.slot-display::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.slot-display::-webkit-scrollbar-thumb {
+	background-color: var(--bs-primary);
+	border-radius: 3px;
 }
 
 .history-entry {

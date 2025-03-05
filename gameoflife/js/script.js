@@ -48,20 +48,33 @@ window.addEventListener("resize", () => {
 
 // Keyboard Controls for History Navigation
 document.addEventListener("keydown", (e) => {
-	if (!grid.intervalId) { // Only when paused
-		switch (e.key) {
-			case "PageUp":
-				grid.history.navigateHistory(-1);
-				break;
-			case "PageDown":
-				grid.history.navigateHistory(1);
-				break;
-			case "Enter":
-				if (e.ctrlKey) {
-					grid.history.restoreState();
+	switch (e.key) {
+		case " ": // Space key
+			if (grid.intervalId) {
+				grid.pause();
+			} else {
+				grid.getGoing();
+			}
+			break;
+		case "PageUp":
+		case "PageDown":
+		case "Enter":
+			if (!grid.intervalId) { // Only when paused
+				switch (e.key) {
+					case "PageUp":
+						grid.history.navigateHistory(-1);
+						break;
+					case "PageDown":
+						grid.history.navigateHistory(1);
+						break;
+					case "Enter":
+						if (e.ctrlKey) {
+							grid.history.restoreState();
+						}
+						break;
 				}
-				break;
-		}
+			}
+			break;
 	}
 });
 

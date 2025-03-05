@@ -21,6 +21,36 @@ export class GameHistory extends Component {
         container.className =
             "history-panel d-flex flex-column gap-2 p-3 bg-info-subtle border rounded border-4";
 
+        // Add chart canvas
+        const chartContainer = document.createElement("div");
+        chartContainer.className = "chart-container mb-3";
+        chartContainer.innerHTML = '<canvas id="populationChart"></canvas>';
+        container.appendChild(chartContainer);
+
+        // Initialize chart
+        const ctx = document.getElementById("populationChart").getContext("2d");
+        this.chart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: [],
+                datasets: [{
+                    label: "Population",
+                    data: [],
+                    borderColor: "rgb(75, 192, 192)",
+                    tension: 0.1,
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                },
+            },
+        });
+
         // Add history size control
         const sizeControl = document.createElement("div");
         sizeControl.className = "d-flex align-items-center gap-2 mb-3";
@@ -31,10 +61,17 @@ export class GameHistory extends Component {
         `;
         container.appendChild(sizeControl);
 
-        // Add slot machine display
+        // Add scrollable slot machine display
         const slotDisplay = document.createElement("div");
         slotDisplay.className = "slot-display d-flex flex-column gap-2";
+        slotDisplay.style.maxHeight = "300px";
+        slotDisplay.style.overflowY = "auto";
         container.appendChild(slotDisplay);
+
+        // Add scroll event listener for slot machine effect
+        slotDisplay.addEventListener("scroll", () => {
+            this.updateSlotMachineEffect(slotDisplay);
+        });
 
         // Navigation controls
         const controls = document.createElement("div");
@@ -73,6 +110,25 @@ export class GameHistory extends Component {
             "click",
             () => this.restoreState(),
         );
+    }
+
+    updateSlotMachineEffect(slotDisplay) {
+        const entries = slotDisplay.querySelectorAll(".history-entry");
+        const slotDisplayRect = slotDisplay.getBoundingClientRect();
+        const centerY = slotDisplayRect.top + slotDisplayRect.height / 2;
+
+        entries.forEach((entry) => {
+            const rect = entry.getBoundingClientRect();
+            const entryCenter = rect.top + rect.height / 2;
+            const distance = Math.abs(centerY - entryCenter) /
+                (rect.height * 2);
+
+            const scale = Math.max(0.7, 1 - (distance * 0.3));
+            const opacity = Math.max(0.5, 1 - (distance * 0.5));
+
+            entry.style.transform = `scale(${scale})`;
+            entry.style.opacity = opacity;
+        });
     }
 
     addState(cells, liveCount) {
@@ -141,25 +197,23 @@ export class GameHistory extends Component {
         const slotDisplay = this.domElement.querySelector(".slot-display");
         slotDisplay.innerHTML = "";
 
-        // Calculate visible range
-        const start = Math.max(
-            0,
-            Math.min(this.currentIndex - 3, this.states.length - 7),
+        // Update chart data
+        this.chart.data.labels = this.states.map((state) =>
+            `#${state.generation}`
         );
-        const end = Math.min(start + 7, this.states.length);
+        this.chart.data.datasets[0].data = this.states.map((state) =>
+            state.liveCount
+        );
+        this.chart.update();
 
-        for (let i = start; i < end; i++) {
+        // Display all states in scrollable view
+        for (let i = 0; i < this.states.length; i++) {
             const state = this.states[i];
             const isCurrent = i === this.currentIndex;
-            const distance = Math.abs(i - this.currentIndex);
-            const scale = Math.max(0.7, 1 - (distance * 0.1));
-            const opacity = Math.max(0.5, 1 - (distance * 0.15));
 
             const entry = document.createElement("div");
             entry.className =
                 "history-entry d-flex align-items-center gap-2 p-2 border rounded";
-            entry.style.transform = `scale(${scale})`;
-            entry.style.opacity = opacity;
             if (isCurrent) entry.classList.add("current");
 
             const diffColor = state.difference > 0
@@ -186,5 +240,8 @@ export class GameHistory extends Component {
 
             slotDisplay.appendChild(entry);
         }
+
+        // Update slot machine effect for initial display
+        this.updateSlotMachineEffect(slotDisplay);
     }
 }
