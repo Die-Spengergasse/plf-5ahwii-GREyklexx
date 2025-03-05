@@ -60,4 +60,4 @@ class Component {
         this.dirty = dirty;
     }
 }
-// export { Component };
+export { Component };
