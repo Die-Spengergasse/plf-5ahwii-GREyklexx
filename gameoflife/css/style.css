@@ -8,7 +8,7 @@
 	left: 20px;
 	top: 50%;
 	transform: translateY(-50%);
-	width: 300px;
+	width: 400px;
 	z-index: 1000;
 	box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
@@ -32,4 +32,27 @@
 
 #grid div.living {
 	background-color: black;
+}
+
+/* Arrow controls styling */
+.arrow-controls {
+	width: 240px !important;
+}
+
+.arrow-controls .btn {
+	padding: 1.2rem;
+	font-size: 1.8rem;
+	min-width: 75px;
+	border-width: 2px;
+}
+
+/* Make play/pause/reset buttons more prominent */
+.btn-group .btn-outline-danger {
+	font-size: 1.2rem;
+	padding: 0.8rem 1.5rem;
+}
+
+.arrow-controls .btn:hover {
+	transform: scale(1.1);
+	transition: transform 0.2s;
 }

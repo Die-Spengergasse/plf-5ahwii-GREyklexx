@@ -1,25 +1,34 @@
 # Dokumentation der Änderungen
 
-## Game of Life Verbesserungen
+# Dokumentation der Änderungen
 
-1. Code-Struktur Verbesserungen:
+## Chronologische Auflistung der Verbesserungen
 
-   - Aufteilung in Module (Grid, Cell, Patterns)
-   - Bessere Organisierung des Codes
-   - Entfernung von ungenutztem Code
+1. Erste Phase - Code-Modularisierung:
 
-2. Technische Verbesserungen:
+   - Erstellung von cell.js aus dem ursprünglichen Code
+   - Extraktion der Pattern-Definitionen in patterns.js
+   - Verbesserung der Grid-Klasse in eigener Datei
 
-   - Verwendung von ES6 Modules
-   - Konstanten für magische Zahlen
-   - Verbesserte Variablennamen
+2. Zweite Phase - Code-Qualität:
 
-3. Aktuelle Probleme:
-   - Grid ist nicht sichtbar - muss behoben werden
-   - Überprüfung der Module-Integration notwendig
+   - Aktivierung der ES6 Module-Importe
+   - Korrektur des Variablennamens von 'intervallId' zu 'intervalId'
+   - Einführung der SHIFT_FACTOR Konstante
+   - Verbesserung der Code-Struktur in Grid-Klasse
 
-## Nächste Schritte
+3. Dritte Phase - UI-Verbesserungen:
 
-- Behebung der Grid-Sichtbarkeit
-- Test der Grundfunktionalität
-- Verbesserung des responsiven Designs
+   - Implementierung des floating Control-Panels
+   - Vergrößerung der Steuerungselemente
+   - Anpassung der Pfeiltasten in Keyboard-Layout
+   - Hinzufügen von Hover-Effekten
+   - Optimierung der Button-Größen
+
+4. Vierte Phase - Styling:
+   - Vergrößerung des Control-Panels auf 400px
+   - Implementierung der Arrow-Controls mit Grid-Layout
+   - Hinzufügen von Transitions für besseres Feedback
+   - Verbesserung der visuellen Hierarchie
+   - Vergrößerung der Pfeiltasten (1.8rem) und stärkere Ränder
+   - Anpassung der Play/Pause/Reset-Buttons für bessere Sichtbarkeit
