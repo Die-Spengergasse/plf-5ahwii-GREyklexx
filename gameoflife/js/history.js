@@ -117,8 +117,9 @@ export class GameHistory extends Component {
     restoreState() {
         if (this.currentIndex >= 0 && this.currentIndex < this.states.length) {
             const state = this.states[this.currentIndex];
-            this.dispatchEvent(
-                new CustomEvent("stateRestore", { detail: state }),
+            // Create and dispatch a custom event on the document
+            document.dispatchEvent(
+                new CustomEvent("gameStateRestore", { detail: state }),
             );
         }
     }
@@ -167,6 +168,7 @@ export class GameHistory extends Component {
             entry.addEventListener("click", () => {
                 this.currentIndex = i;
                 this.updateDisplay();
+                this.restoreState();
             });
 
             slotDisplay.appendChild(entry);

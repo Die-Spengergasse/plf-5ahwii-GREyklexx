@@ -36,8 +36,8 @@ export class Grid extends Component {
             document.body,
             DEFAULT_HISTORY_SIZE,
         );
-        this.history.domElement.addEventListener(
-            "stateRestore",
+        document.addEventListener(
+            "gameStateRestore",
             (e) => this.restoreFromHistory(e.detail),
         );
     }
