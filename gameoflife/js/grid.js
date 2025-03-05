@@ -85,6 +85,9 @@ export class Grid extends Component {
     toggleLiving(row, column) {
         this.getCell(row, column).toggleLiving();
         this.displayLiveCount();
+        const liveCount =
+            [...this.cellIterator()].filter((cell) => cell.living).length;
+        this.history.addState(this.cells, liveCount);
     }
 
     getCell(row, column, obj = this.cells) {
@@ -177,6 +180,11 @@ export class Grid extends Component {
 
         this.cells = futureCells;
         [...this.cellIterator()].forEach((cell) => cell.updateDisplay());
+
+        // Record shift in history
+        const liveCount =
+            [...this.cellIterator()].filter((cell) => cell.living).length;
+        this.history.addState(this.cells, liveCount);
     }
 
     displayLiveCount() {
@@ -207,9 +215,8 @@ export class Grid extends Component {
         [...this.cellIterator()].forEach((cell) => cell.setLiving(false));
         this.cells = {};
         this.displayLiveCount();
-        // Reset history with initial empty state
-        this.history.states = [];
-        this.history.currentIndex = -1;
+        // Reset history
+        this.history.reset();
         this.history.addState(this.cells, 0);
     }
 
@@ -220,10 +227,16 @@ export class Grid extends Component {
             return;
         }
 
+        // Reset and apply pattern
+        this.reset();
         pattern.forEach(([row, column]) => {
             this.getCell(row, column).setLiving(true);
         });
 
+        // Update display and history
         this.displayLiveCount();
+        const liveCount =
+            [...this.cellIterator()].filter((cell) => cell.living).length;
+        this.history.addState(this.cells, liveCount);
     }
 }

@@ -1,1 +1,4 @@
-- Timeline: vor und zurückspulen inklusive von wieviele Zellen zerstört und wieder erweckt wurden.
+- [x] Timeline: vor und zurückspulen inklusive von wieviele Zellen zerstört und wieder erweckt wurden.
+- []Linechart, welches die veränderung der history anzeigt.
+- [] Make the Timeline scrollable
+- [] pause with space

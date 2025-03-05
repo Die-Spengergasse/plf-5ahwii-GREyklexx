@@ -6,6 +6,7 @@ export class GameHistory extends Component {
     maxSize;
     states = [];
     currentIndex = -1;
+    currentGeneration = 0;
 
     constructor(parent, anchor, maxSize = 100) {
         super(parent, anchor);
@@ -78,16 +79,21 @@ export class GameHistory extends Component {
         const previousCount = this.states.length > 0
             ? this.states[this.states.length - 1].liveCount
             : 0;
+
+        this.currentGeneration++;
         const state = {
             cells: this.serializeCells(cells),
             liveCount,
             difference: liveCount - previousCount,
-            generation: this.states.length + 1,
+            generation: this.currentGeneration,
             timestamp: Date.now(),
         };
 
         if (this.states.length >= this.maxSize) {
             this.states.shift();
+            if (this.currentIndex > -1) {
+                this.currentIndex--;
+            }
         }
         this.states.push(state);
         this.currentIndex = this.states.length - 1;
@@ -122,6 +128,13 @@ export class GameHistory extends Component {
                 new CustomEvent("gameStateRestore", { detail: state }),
             );
         }
+    }
+
+    reset() {
+        this.states = [];
+        this.currentIndex = -1;
+        this.currentGeneration = 0;
+        this.updateDisplay();
     }
 
     updateDisplay() {
