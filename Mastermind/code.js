@@ -108,7 +108,7 @@ class Guess extends Code {
             parent.notify("Ich kenne die richtige Lösung ;)");
         } else {
             parent.notify(
-                `Neuer Versuch, ${possibilities.length} gültige Möglichkeiten`
+                `Neuer Versuch, ${possibilities.length} gültige Möglichkeiten`,
             );
         }
         this.possibilitiesInherited = possibilities;
@@ -161,28 +161,32 @@ class Guess extends Code {
             master = this.parent.master.getPrimitive();
         }
         this.bewertung = this.getPrimitive();
-        // this.parent.notify(`master: ${master}`)
-        // this.parent.notify(`guessA: ${this.bewertung}`)
         this.bewertung = this.getBewertung(master, this.bewertung);
+
+        // Wenn Computer bewertet, automatisch nächsten Zug machen
+        const isComputerEvaluating = this.parent.computerCanEvaluate;
+
         this.parent.notify(
-            `Bewertung: ${this.bewertung[0]} schwarze und ${this.bewertung[1]} weisse`
+            `${isComputerEvaluating ? "[Computer] " : ""}Bewertung: ${
+                this.bewertung[0]
+            } schwarze und ${this.bewertung[1]} weisse`,
         );
         bewCount = 1;
         for (let i = 0; i < this.bewertung[0]; i++) {
             this.domObj.getElementsByClassName(
-                `b${bewCount}`
+                `b${bewCount}`,
             )[0].style.backgroundColor = "#000";
             bewCount++;
         }
         for (let i = 0; i < this.bewertung[1]; i++) {
             this.domObj.getElementsByClassName(
-                `b${bewCount}`
+                `b${bewCount}`,
             )[0].style.backgroundColor = "#fff";
             bewCount++;
         }
         for (; bewCount <= 4; bewCount++) {
             this.domObj.getElementsByClassName(
-                `b${bewCount}`
+                `b${bewCount}`,
             )[0].style.backgroundColor = "#888";
         }
         if (!this.isBewerted) {
@@ -204,7 +208,7 @@ class Guess extends Code {
             if (
                 this.arraysEqual(
                     this.getBewertung(poss, primitivThis),
-                    this.bewertung
+                    this.bewertung,
                 )
             ) {
                 rw.push(poss);
@@ -258,9 +262,52 @@ class Guess extends Code {
         return [schwarze, weisse];
     }
     autoGuess() {
-        let bestArray = this.getBestArray(this.possibilitiesInherited);
-        let autoGuess = bestArray[Math.floor(Math.random() * bestArray.length)];
-        this.updateSelf(autoGuess);
+        const possibilities = this.possibilitiesInherited;
+        let bestGuess;
+
+        if (possibilities.length === 1) {
+            // Wenn nur noch eine Möglichkeit, diese nehmen
+            bestGuess = possibilities[0];
+        } else {
+            // Minimax-Strategie: Wähle den Zug, der die möglichen Kombinationen am meisten reduziert
+            let bestScore = -1;
+            let bestGuesses = [];
+
+            for (let guess of possibilities) {
+                let minEliminated = Number.MAX_VALUE;
+
+                // Für jede mögliche Bewertung
+                for (let black = 0; black <= 4; black++) {
+                    for (let white = 0; white <= 4 - black; white++) {
+                        let remaining = possibilities.filter((code) =>
+                            this.arraysEqual(this.getBewertung(guess, code), [
+                                black,
+                                white,
+                            ])
+                        ).length;
+                        minEliminated = Math.min(minEliminated, remaining);
+                    }
+                }
+
+                if (minEliminated > bestScore) {
+                    bestScore = minEliminated;
+                    bestGuesses = [guess];
+                } else if (minEliminated === bestScore) {
+                    bestGuesses.push(guess);
+                }
+            }
+
+            // Wähle zufällig aus den besten Zügen
+            bestGuess =
+                bestGuesses[Math.floor(Math.random() * bestGuesses.length)];
+        }
+
+        this.updateSelf(bestGuess);
+
+        // Wenn Computer bewertet, automatisch bewerten
+        if (this.parent.computerCanEvaluate) {
+            setTimeout(() => this.bewerte(), 500);
+        }
     }
 
     updateSelf(guess) {
@@ -297,11 +344,12 @@ class DiversityMap extends Map {
     getFullestArray() {
         let max = 0;
         let rw;
-        for (let i of this.keys())
+        for (let i of this.keys()) {
             if (this.get(i).length > max) {
                 max = this.get(i).length;
                 rw = this.get(i);
             }
+        }
         return rw;
     }
     getMostDiverseArray() {
