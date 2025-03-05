@@ -1,0 +1,83 @@
+/* History Panel Styling */
+#history-panel {
+	position: fixed;
+	right: 20px;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 400px;
+	z-index: 1000;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Slot Display */
+.slot-display {
+	min-height: 400px;
+	perspective: 1000px;
+	transform-style: preserve-3d;
+}
+
+.history-entry {
+	transition: all 0.3s ease;
+	transform-origin: center right;
+	background: white;
+	cursor: pointer;
+	margin: 4px 0;
+}
+
+.history-entry:hover {
+	transform: scale(1.05) !important;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.history-entry.current {
+	border-color: var(--bs-primary) !important;
+	border-width: 2px !important;
+	background-color: var(--bs-primary-bg-subtle);
+}
+
+/* Generation Number */
+.generation {
+	font-weight: bold;
+	min-width: 45px;
+}
+
+/* Density Bar */
+.density-bar {
+	font-family: monospace;
+	letter-spacing: 1px;
+	color: var(--bs-primary);
+}
+
+/* Count and Difference */
+.count {
+	font-weight: bold;
+	min-width: 40px;
+	text-align: right;
+}
+
+.difference {
+	min-width: 50px;
+	text-align: right;
+	font-size: 0.9em;
+}
+
+/* Controls */
+#history-size {
+	width: 80px;
+}
+
+/* Animation for state changes */
+@keyframes slideIn {
+	from {
+		transform: translateY(20px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+.history-entry {
+	animation: slideIn 0.3s ease;
+}
