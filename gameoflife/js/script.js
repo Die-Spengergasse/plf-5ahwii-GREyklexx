@@ -45,3 +45,25 @@ window.addEventListener("resize", () => {
 		}
 	}, 250); // Debounce resize events
 });
+
+// Keyboard Controls for History Navigation
+document.addEventListener("keydown", (e) => {
+	if (!grid.intervalId) { // Only when paused
+		switch (e.key) {
+			case "PageUp":
+				grid.history.navigateHistory(-1);
+				break;
+			case "PageDown":
+				grid.history.navigateHistory(1);
+				break;
+			case "Enter":
+				if (e.ctrlKey) {
+					grid.history.restoreState();
+				}
+				break;
+		}
+	}
+});
+
+// Initialize history with current state
+grid.history.addState(grid.cells, 0);

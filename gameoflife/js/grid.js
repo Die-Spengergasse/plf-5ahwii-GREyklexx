@@ -3,8 +3,10 @@
 import { Component } from "./component.js";
 import { Cell } from "./cell.js";
 import { PATTERNS } from "./patterns.js";
+import { GameHistory } from "./history.js";
 
 const SHIFT_FACTOR = 5;
+const DEFAULT_HISTORY_SIZE = 100;
 
 export class Grid extends Component {
     columns;
@@ -25,6 +27,28 @@ export class Grid extends Component {
         this.cells = {};
         this.elements = new Map();
         this.createCells();
+        this.initializeHistory();
+    }
+
+    initializeHistory() {
+        this.history = new GameHistory(
+            null,
+            document.body,
+            DEFAULT_HISTORY_SIZE,
+        );
+        this.history.domElement.addEventListener(
+            "stateRestore",
+            (e) => this.restoreFromHistory(e.detail),
+        );
+    }
+
+    restoreFromHistory(state) {
+        this.pause();
+        this.reset();
+        state.cells.forEach(([row, col]) => {
+            this.getCell(row, col).setLiving(true);
+        });
+        this.displayLiveCount();
     }
 
     initializeGrid() {
@@ -82,20 +106,18 @@ export class Grid extends Component {
     }
 
     ageOneGeneration() {
-        // 1. Calculate future state for all living cells
+        // Calculate all future states
         [...this.cellIterator()].forEach((cell) => cell.calculateLivingThen());
-
-        // 2. Calculate future state for neighbor cells
         [...this.cellIterator()].forEach((cell) => {
             cell.livingThen ?? cell.calculateLivingThen();
         });
 
-        // 3. Update all cells to their next generation
+        // Update to next generation
         [...this.cellIterator()].forEach((cell) =>
             cell.advanceToNextGeneration()
         );
 
-        // 4. Transfer living cells to new object and update
+        // Transfer living cells and update
         const futureCells = {};
         [...this.cellIterator()].forEach((cell) => {
             if (cell.living) {
@@ -103,7 +125,11 @@ export class Grid extends Component {
             }
         });
 
+        // Update state and history
         this.cells = futureCells;
+        const liveCount =
+            [...this.cellIterator()].filter((cell) => cell.living).length;
+        this.history.addState(this.cells, liveCount);
         this.displayLiveCount();
     }
 
@@ -181,6 +207,10 @@ export class Grid extends Component {
         [...this.cellIterator()].forEach((cell) => cell.setLiving(false));
         this.cells = {};
         this.displayLiveCount();
+        // Reset history with initial empty state
+        this.history.states = [];
+        this.history.currentIndex = -1;
+        this.history.addState(this.cells, 0);
     }
 
     setPattern(patternName) {

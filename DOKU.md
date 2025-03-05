@@ -26,8 +26,17 @@
    - Optimierung der Button-Größen
 
 4. Vierte Phase - Styling:
+
    - Vergrößerung des Control-Panels auf 400px
    - Implementierung der Arrow-Controls mit Grid-Layout
    - Hinzufügen von Transitions für besseres Feedback
    - Verbesserung der visuellen Hierarchie
    - Optimierung der Grid-Zellen-Grenzen mit outline
+
+5. Fünfte Phase - History Feature:
+   - Implementierung eines Slot-Machine-Style History Panels
+   - Speicherung und Anzeige von Generationszuständen
+   - Möglichkeit zur Navigation durch die Historie (PageUp/PageDown)
+   - Wiederherstellung früherer Zustände (Ctrl+Enter)
+   - Anzeige von Statistiken (lebende Zellen, Veränderungen)
+   - Konfigurierbare History-Größe (1-512 Generationen)
